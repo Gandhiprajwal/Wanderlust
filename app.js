@@ -86,9 +86,9 @@ app.use((req, res, next) => {
 });
 
 // // check route
-// app.get("/", (req, res) => {
-//   res.send("Hello, I am root")
-// });
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 // middleware --> express routes --> listings
 app.use("/listings", listingsRouter);
