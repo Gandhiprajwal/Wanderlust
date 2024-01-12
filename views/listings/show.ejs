@@ -162,7 +162,6 @@
   ></script>
 
   <script type="text/javascript">
-    if ("<%=latitude%>" !== "undefined") {
       function GetMap() {
         var map = new Microsoft.Maps.Map("#myMap", {
           center: new Microsoft.Maps.Location(
@@ -183,6 +182,5 @@
         map.entities.push(pin);
         //Add your post map load code here.
       }
-    }
   </script>
 </body>
