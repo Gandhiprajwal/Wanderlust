@@ -42,6 +42,7 @@ module.exports.showListings = async (req, res) => {
         const location = data.resourceSets[0].resources[0].point.coordinates;
         const latitude = location[0];
         const longitude = location[1];
+        // console.log(latitude + "..." + longitude);
         res.render("./listings/show.ejs", { listing, latitude,longitude,BING_MAPS_API_KEY});
         // console.log(latitude + "..." + longitude);
       } else {

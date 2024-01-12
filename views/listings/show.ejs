@@ -14,7 +14,9 @@
         <div class="card-text">
           <p><b>Owned By:</b> <i><%=listing.owner.username%></i></p>
           <p><b>Description</b><%= listing.description%></p>
-          <p><b>Price:</b> &#8377; <%= listing.price.toLocaleString("en-IN")%></p>
+          <p>
+            <b>Price:</b> &#8377; <%= listing.price.toLocaleString("en-IN")%>
+          </p>
           <p><b>Address:</b> <%= listing.location%></p>
           <p><b>Country:</b> <%= listing.country%></p>
         </div>
@@ -160,22 +162,27 @@
   ></script>
 
   <script type="text/javascript">
-    function GetMap() {
-      var map = new Microsoft.Maps.Map("#myMap", {
-        center: new Microsoft.Maps.Location("<%=latitude%>", "<%=longitude%>"),
-        zoom: 15
-      });
-      var center = map.getCenter();
+    if ("<%=latitude%>" !== "undefined") {
+      function GetMap() {
+        var map = new Microsoft.Maps.Map("#myMap", {
+          center: new Microsoft.Maps.Location(
+            "<%=latitude%>",
+            "<%=longitude%>"
+          ),
+          zoom: 15,
+        });
+        var center = map.getCenter();
 
-      //Create custom Pushpin
-      var pin = new Microsoft.Maps.Pushpin(center, {
-        title: "<%=listing.location%>",
-        // icon: 'images/poi_custom.png',
-      });
+        //Create custom Pushpin
+        var pin = new Microsoft.Maps.Pushpin(center, {
+          title: "<%=listing.location%>",
+          // icon: 'images/poi_custom.png',
+        });
 
-      //Add the pushpin to the map
-      map.entities.push(pin);
-      //Add your post map load code here.
+        //Add the pushpin to the map
+        map.entities.push(pin);
+        //Add your post map load code here.
+      }
     }
   </script>
 </body>
