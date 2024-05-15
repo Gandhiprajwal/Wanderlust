@@ -2,6 +2,7 @@ const Booking = require("../models/booking");
 const axios = require("axios");
 const Listing = require("../models/listing");
 
+// new booking
 module.exports.newBooking = async(req,res)=>{
     let { id } = req.params;
     const data = req.body.booking;
@@ -21,6 +22,7 @@ module.exports.newBooking = async(req,res)=>{
     res.redirect(`/listings/${id}`);
 }
 
+// show booking
 module.exports.showBookings = async(req,res)=>{
     // find the bookings of the current user from the database
     const curr = req.user._id;
