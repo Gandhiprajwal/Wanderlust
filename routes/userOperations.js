@@ -2,8 +2,14 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
-const { saveRedirectUrl } = require("../middleware");
-const userController = require("../controllers/users");
+const {
+  saveRedirectUrl,
+  isLoggedIn,
+  capitalizeCity,
+  capitalizeCategory,
+} = require("../middleware");
+const userController = require("../controllers/userOperations");
+const bookingController = require("../controllers/booking");
 
 // router.route
 // for signup
@@ -32,4 +38,23 @@ router
 // for logout
 router.get("/logout", userController.logOut);
 
+// for bookings
+router
+  .route("/bookings")
+  .get(isLoggedIn, wrapAsync(bookingController.showBookings));
+
+// for search city hotels/villa's
+router
+  .route("/search")
+  .get(capitalizeCity, wrapAsync(userController.searchCity));
 module.exports = router;
+
+// for filter category
+router
+  .route("/filter")
+  .get(capitalizeCategory, wrapAsync(userController.filterCategory));
+
+// for getDirection
+router
+  .route("/map/:id")
+  .get(isLoggedIn, wrapAsync(userController.getDirection));

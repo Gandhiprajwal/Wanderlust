@@ -23,7 +23,7 @@ module.exports.showListings = async (req, res) => {
       },
     })
     .populate("owner");
-  // console.log(process.env.MAP_API);
+  // console.log(listing);
   // console.log(listing.country + ".." + listing.location);
   if (!listing) {
     req.flash("error", "Listing you requested for doesn't exist!");
@@ -87,6 +87,7 @@ module.exports.createListings = async (req, res, next) => {
   // }
   let url = req.file.path;
   let filename = req.file.filename;
+  // console.log(req.body);
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
   newListing.image = { filename, url };

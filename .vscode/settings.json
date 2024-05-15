@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/12729d1a-6af4-4fdf-9ac8-786e3a09fe33/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/wanderlust-prajwalgandhi",
+    "appService.deploySubpath": "."
+}
