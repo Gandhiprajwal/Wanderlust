@@ -33,6 +33,9 @@ const Booking = require("./models/booking.js");
 const Listing = require("./models/listing.js");
 const { populate } = require("dotenv");
 const { bookingSchema } = require("./schema.js");
+const Razorpay = require("razorpay");
+const bodyparse = require("body-parser");
+app.use(bodyparse.json());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -109,9 +112,30 @@ app.use("/listings", listingsRouter);
 // middleware --> express route --> reviews
 app.use("/listings/:id/reviews", reviewsRouter);
 // middleware --> express route --> bookings
-app.use("/listings",bookingRouter);
+app.use("/listings", bookingRouter);
 // middleware --> express route --> user
 app.use("/", userRouter);
+
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API,
+  key_secret: process.env.RAZORPAY_SECRETKEY,
+});
+
+app.post("/create/orderId", async (req, res) => {
+  // console.log(req.body.listingId);
+  const listing = await Listing.findById(req.body.listingId);
+  // console.log(listing);
+  let options = {
+    amount: listing.price * 1.18, // amount in the smallest currency unit
+    currency: "INR",
+    receipt: "rcp11",
+  };
+  instance.orders.create(options, function (err, order) {
+    // console.log(order);
+    res.json(order);
+  });
+});
+
 
 // Demo user
 // app.get("/demouser",async(req,res)=>{

@@ -46,5 +46,9 @@ module.exports.bookingSchema = Joi.object({
     guests: Joi.number().required().min(1),
     checkin: Joi.date().min(getCurrentDate()).required(), // Set minimum date to current date
     checkout: Joi.date().required(),
+    razorpayOrderId: Joi.string().required(),
+    razorpayPaymentId: Joi.string().required(),
+    razorpaySignature: Joi.string().required(),
+    amount: Joi.number().required().min(0),
   }).required(),
 });

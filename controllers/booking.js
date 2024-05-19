@@ -6,6 +6,8 @@ const Listing = require("../models/listing");
 module.exports.newBooking = async(req,res)=>{
     let { id } = req.params;
     const data = req.body.booking;
+    // console.log(id);
+    // console.log(req.body);
     let checkin = new Date(data.checkin);
     let checkout = new Date(data.checkout);
     let count = (checkout - checkin) / (1000 * 60 * 60 * 24);
@@ -19,7 +21,7 @@ module.exports.newBooking = async(req,res)=>{
     req.flash("success", "Thank You! Visit Our Website Again.");
     // console.log(data.checkin+" "+id+" "+count);
     // res.send(data);
-    res.redirect(`/listings/${id}`);
+    res.redirect(`/bookings`);
 }
 
 // show booking
@@ -35,8 +37,8 @@ module.exports.showBookings = async(req,res)=>{
       populate: { path: "owner" },
     });
     // write the condition 
-    console.log(res.locals.currUser._id);
-    console.log(adminBooking);
+    // console.log(res.locals.currUser._id);
+    // console.log(adminBooking);
     res.render("./bookings/bookingShow.ejs", { bookings, adminBooking });
 }
 

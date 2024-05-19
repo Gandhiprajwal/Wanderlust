@@ -35,8 +35,23 @@
           <div class="invalid-feedback">Please enter a short description.</div>
         </div>
         <div class="mb-3">
-          Original Listing Image <br>
-          <img src="<%=originalImageUrl%>" alt="<%=listing.image.filename%>">
+          <label for="category" class="form-label">Category:</label>
+          <select id="category" name="listing[category]" class="form-control">
+            <option selected><%=listing.category%></option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic Cities">Iconic Cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Castles">Castles</option>
+            <option value="Amazing Pools">Amazing Pools</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Arctic Domes">Arctic Domes</option>
+            <option value="Boats">Boats</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          Original Listing Image <br />
+          <img src="<%=originalImageUrl%>" alt="<%=listing.image.filename%>" />
         </div>
         <div class="mb-3">
           <label for="image.url" class="form-label">Upload New Image</label>
@@ -54,7 +69,7 @@
             />
             <div class="invalid-feedback">Please enter a valid Price.</div>
           </div>
-          <div class="mb-3 col-md-8">
+          <div class="mb-3 col-md-4">
             <label for="country" class="form-label">Country</label>
             <input
               type="text"
@@ -64,6 +79,18 @@
               required
             />
             <div class="invalid-feedback">Country should be valid!</div>
+          </div>
+          <div class="mb-3 col-md-4">
+            <label for="country" class="form-label">City</label>
+            <input
+              type="text"
+              value="<%=listing.city%>"
+              placeholder="Enter City. Ex.Udaipur,Rajasthan"
+              name="listing[city]"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">City should be valid!</div>
           </div>
         </div>
         <div class="mb-3">

@@ -47,7 +47,6 @@ router
 router
   .route("/search")
   .get(capitalizeCity, wrapAsync(userController.searchCity));
-module.exports = router;
 
 // for filter category
 router
@@ -58,3 +57,18 @@ router
 router
   .route("/map/:id")
   .get(isLoggedIn, wrapAsync(userController.getDirection));
+
+// for error
+router.route("/error").post(wrapAsync(bookingController.error));
+
+// for payment
+// router
+//   .route("/create/orderId")
+//   .post(wrapAsync(bookingController.createOrderId));
+
+// for payment success
+router
+  .route("/api/payment/verify")
+  .post(wrapAsync(bookingController.paymentSuccess));
+  
+module.exports = router;

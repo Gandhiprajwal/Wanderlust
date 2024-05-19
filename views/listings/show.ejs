@@ -17,7 +17,9 @@
           <p><b>Category: </b><%= listing.category%></p>
           <p>
             <b>Price:</b> &#8377; <%= (listing.price).toLocaleString("en-IN")%>
-            <small class="form-text text-muted">(Taxes are not included.)</small>
+            <small class="form-text text-muted"
+              >(Taxes are not included.)</small
+            >
           </p>
           <p><b>Address:</b> <%= listing.location%></p>
           <p><b>City:</b> <%= listing.city%></p>
@@ -46,6 +48,7 @@
         method="POST"
         novalidate
         class="needs-validation"
+        id="bookingForm"
       >
         <!-- take the name, govt ID,not of guests -->
         <div class="mb-3 mt-3 col-8">
@@ -127,8 +130,27 @@
           />
           <div class="invalid-feedback">Please provide an end date.</div>
         </div>
-        <button class="btn btn-outline-dark">Book</button><br>
-        <small class="form-text text-muted">*Cancellation is not allowed.</small>
+        <input
+          type="hidden"
+          name="booking[razorpayPaymentId]"
+          id="razorpay_payment_id"
+        />
+        <input
+          type="hidden"
+          name="booking[razorpayOrderId]"
+          id="razorpay_order_id"
+        />
+        <input
+          type="hidden"
+          name="booking[razorpaySignature]"
+          id="razorpay_signature"
+        />
+        <input type="hidden" name="booking[amount]" id="amount" />
+        <button class="btn btn-outline-dark" id="razorpayButton">Book</button
+        ><br />
+        <small class="form-text text-muted"
+          >*Cancellation is not allowed.</small
+        >
       </form>
     </div>
 
@@ -256,7 +278,7 @@
     async
     defer
   ></script>
-
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script type="text/javascript">
     function GetMap() {
       var map = new Microsoft.Maps.Map("#myMap", {
@@ -275,5 +297,63 @@
       map.entities.push(pin);
       //Add your post map load code here.
     }
+  </script>
+  <script>
+    // Initialize Razorpay
+    axios
+      .post("/create/orderId", { listingId: "<%=listing._id%>" })
+      .then((info) => {
+        // console.log(info);
+        var razorpayOptions = {
+          key: "rzp_test_NKXEqrItGHj1e0", // Replace with your Razorpay API key
+          amount: `<%=(listing.price*1.18)%>`, // Replace with the actual amount in paisa
+          currency: "INR",
+          name: `<%=(listing.owner.username)%>`,
+          description: "Booking Payment",
+          order_id: info.data.id, // Replace with the order ID generated on the server
+          retry: false,
+          send_sms_hash: true,
+          handler: function (response) {
+            if (response.razorpay_payment_id) {
+              // Submit the form after successful payment
+              document.getElementById("razorpay_payment_id").value =
+                response.razorpay_payment_id;
+              document.getElementById("razorpay_order_id").value =
+                response.razorpay_order_id;
+              document.getElementById("razorpay_signature").value =
+                response.razorpay_signature;
+              document.getElementById(
+                "amount"
+              ).value = `<%=(listing.price*1.18)%>`;
+              document.getElementById("bookingForm").submit();
+              console.log(response);
+
+              // Handle successful payment
+              // console.log("Payment success:", response);
+            } else {
+              // Handle payment failure
+              axios
+                .post("/error")
+                .then(() => {
+                  console.log("Payment failed:", response);
+                })
+                .catch((err) => {
+                  // console.log(err);
+                });
+            }
+          },
+          theme: {
+            color: "#F37254",
+          },
+        };
+
+        var razorpayButton = document.getElementById("razorpayButton");
+        razorpayButton.addEventListener("click", function (e) {
+          // Create order and open Razorpay modal
+          var rzp = new Razorpay(razorpayOptions);
+          rzp.open();
+          e.preventDefault();
+        });
+      });
   </script>
 </body>

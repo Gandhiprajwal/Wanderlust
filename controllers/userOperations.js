@@ -1,6 +1,9 @@
 const User = require("../models/user");
 const Listing = require("../models/listing");
 const axios = require("axios");
+const Razorpay = require("razorpay");
+// const bodyparse = require("body-parser");
+// app.use(bodyparse.json());
 
 // Signup Page --> Render
 module.exports.renderSignup = (req, res) => {
@@ -108,4 +111,51 @@ module.exports.getDirection = async (req, res) => {
       res.send("Error fetching data");
       console.error("Error:", error);
     });
+};
+
+// razorpay error
+module.exports.error = (req, res) => {
+  req.flash("error", "Payment is failed! Kindly try again.");
+  res.redirect("/listings");
+};
+
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API,
+  key_secret: process.env.RAZORPAY_SECRETKEY,
+});
+
+// razorpay create order
+module.exports.createOrder = async (req, res) => {
+  // console.log(req.body.listingId);
+  const listing = await Listing.findById(req.body.listingId);
+  // console.log(listing);
+  let options = {
+    amount: listing.price * 1.18, // amount in the smallest currency unit
+    currency: "INR",
+    receipt: "rcp11",
+  };
+  instance.orders.create(options, function (err, order) {
+    // console.log(order);
+    res.json(order);
+  });
+};
+
+// razorpay verify payment
+module.exports.verifyPayment = (req, res) => {
+  let body =
+    req.body.response.razorpay_order_id +
+    "|" +
+    req.body.response.razorpay_payment_id;
+
+  var crypto = require("crypto");
+  var expectedSignature = crypto
+    .createHmac("sha256", "Wok5mJv2F0pa5HKLeXZfUr9r")
+    .update(body.toString())
+    .digest("hex");
+  console.log("sig received ", req.body.response.razorpay_signature);
+  console.log("sig generated ", expectedSignature);
+  var response = { signatureIsValid: "false" };
+  if (expectedSignature === req.body.response.razorpay_signature)
+    response = { signatureIsValid: "true" };
+  res.send(response);
 };

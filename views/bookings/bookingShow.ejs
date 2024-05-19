@@ -25,7 +25,13 @@
             >(Taxes are not included.)</small
           >
         </h6>
-
+        <h6 class="card-title">
+          <b>Paid Amount:</b> &#8377; <%=
+          booking.amount.toLocaleString("en-IN")%>/night &nbsp;<small
+            class="form-text text-muted"
+            >(It includes with taxes.)</small
+          >
+        </h6>
         <p class="card-text mb-3"><%=booking.listing.description%></p>
       </div>
       <h5 class="card-text">Your's Details</h5>
