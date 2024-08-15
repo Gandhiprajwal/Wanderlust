@@ -32,6 +32,7 @@ module.exports.showListings = async (req, res) => {
   const query = `${listing.country},${listing.location}`;
   const encodedQuery = encodeURIComponent(query);
   const BING_MAPS_API_KEY = process.env.MAP_API;
+  const RAZORPAY_API_KEY = process.env.RAZORPAY_API;
   const url = `http://dev.virtualearth.net/REST/v1/Locations?q=${encodedQuery}&key=${BING_MAPS_API_KEY}`;
 
   axios
@@ -43,7 +44,7 @@ module.exports.showListings = async (req, res) => {
         const latitude = location[0];
         const longitude = location[1];
         // console.log(latitude + "..." + longitude);
-        res.render("./listings/show.ejs", { listing, latitude,longitude,BING_MAPS_API_KEY});
+        res.render("./listings/show.ejs", { listing, latitude,longitude,BING_MAPS_API_KEY,RAZORPAY_API_KEY});
         // console.log(latitude + "..." + longitude);
       } else {
         res.send("No results found");

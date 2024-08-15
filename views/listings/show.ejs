@@ -305,7 +305,7 @@
       .then((info) => {
         // console.log(info);
         var razorpayOptions = {
-          key: "rzp_test_NKXEqrItGHj1e0", // Replace with your Razorpay API key
+          key: `<%=(listing.RAZORPAY_API_KEY)%>`, // Replace with your Razorpay API key
           amount: parseInt(`<%=(listing.price*1.18)%>`), // Replace with the actual amount in paisa
           currency: "INR",
           name: `<%=(listing.owner.username)%>`,
