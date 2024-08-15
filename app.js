@@ -126,7 +126,7 @@ app.post("/create/orderId", async (req, res) => {
   const listing = await Listing.findById(req.body.listingId);
   // console.log(listing);
   let options = {
-    amount: listing.price * 1.18, // amount in the smallest currency unit
+    amount: parseInt(listing.price * 1.18), // amount in the smallest currency unit
     currency: "INR",
     receipt: "rcp11",
   };
@@ -135,7 +135,6 @@ app.post("/create/orderId", async (req, res) => {
     res.json(order);
   });
 });
-
 
 // Demo user
 // app.get("/demouser",async(req,res)=>{

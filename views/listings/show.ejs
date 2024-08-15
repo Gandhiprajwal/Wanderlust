@@ -306,7 +306,7 @@
         // console.log(info);
         var razorpayOptions = {
           key: "rzp_test_NKXEqrItGHj1e0", // Replace with your Razorpay API key
-          amount: `<%=(listing.price*1.18)%>`, // Replace with the actual amount in paisa
+          amount: parseInt(`<%=(listing.price*1.18)%>`), // Replace with the actual amount in paisa
           currency: "INR",
           name: `<%=(listing.owner.username)%>`,
           description: "Booking Payment",
@@ -322,9 +322,9 @@
                 response.razorpay_order_id;
               document.getElementById("razorpay_signature").value =
                 response.razorpay_signature;
-              document.getElementById(
-                "amount"
-              ).value = `<%=(listing.price*1.18)%>`;
+              document.getElementById("amount").value = parseInt(
+                `<%=(listing.price*1.18)%>`
+              );
               document.getElementById("bookingForm").submit();
               console.log(response);
 
